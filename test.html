@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线学习社区小程序原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .prototype-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .screen {
+            width: 320px;
+            height: 568px;
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 1px solid #eee;
+        }
+        
+        .screen-title {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .status-bar {
+            height: 24px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 12px;
+            align-items: center;
+            font-size: 12px;
+            color: #333;
+        }
+        
+        .header {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+        }
+        
+        .header-title {
+            font-size: 17px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .back-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tab-bar {
+            height: 50px;
+            display: flex;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid #f0f0f0;
+            background-color: white;
+        }
+        
+        .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #999;
+        }
+        
+        .tab-item.active {
+            color: #4285f4;
+        }
+        
+        .tab-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        
+        .content {
+            height: calc(100% - 118px);
+            overflow-y: auto;
+            padding: 15px;
+        }
+        
+        .search-bar {
+            height: 36px;
+            background-color: #f5f5f5;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+        
+        .search-icon {
+            color: #999;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .search-input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .category-tabs {
+            display: flex;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category-tab {
+            padding: 6px 12px;
+            margin-right: 8px;
+            border-radius: 16px;
+            font-size: 13px;
+            color: #666;
+            background-color: #f5f5f5;
+        }
+        
+        .category-tab.active {
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        .note-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .note-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #eee;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .username {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        
+        .publish-time {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .note-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .note-content {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .note-image {
+            width: 100%;
+            height: 120px;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .note-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .note-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-icon {
+            margin-right: 4px;
+        }
+        
+        .button {
+            height: 36px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        
+        .primary-button {
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        .outline-button {
+            border: 1px solid #4285f4;
+            color: #4285f4;
+        }
+        
+        .floating-button {
+            position: absolute;
+            right: 20px;
+            bottom: 70px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: #4285f4;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .more-link {
+            font-size: 12px;
+            color: #999;
+            font-weight: normal;
+        }
+        
+        .course-card {
+            display: flex;
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .course-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+            margin-right: 12px;
+            overflow: hidden;
+        }
+        
+        .course-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .course-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .course-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .course-desc {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        
+        .course-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-right: 4px;
+            background-color: #f0f8ff;
+            color: #4285f4;
+        }
+        
+        .video-card {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 160px;
+            border-radius: 12px;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 10px;
+        }
+        
+        .video-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+        
+        .video-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .comment-item {
+            margin-bottom: 15px;
+        }
+        
+        .comment-content {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+        
+        .comment-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .exercise-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .exercise-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+            margin-bottom: 10px;
+        }
+        
+        .option-item.selected {
+            background-color: #e6f2ff;
+            border: 1px solid #4285f4;
+        }
+        
+        .option-prefix {
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 14px;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+        
+        .option-item.selected .option-prefix {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+        }
+        
+        .option-content {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            background-color: #eee;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-name {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        
+        .profile-desc {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .profile-stats {
+            display: flex;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .profile-stat-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .menu-list {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            color: #666;
+        }
+        
+        .menu-label {
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .menu-arrow {
+            color: #ccc;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 15px;
+        }
+        
+        .toolbar-item {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            border-radius: 4px;
+            color: #666;
+        }
+        
+        .toolbar-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .editor-content {
+            min-height: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .editor-placeholder {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .tag-selector {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .modal-content {
+            width: 80%;
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .modal-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .modal-button {
+            flex: 1;
+            height: 36px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .cancel-button {
+            background-color: #f5f5f5;
+            color: #666;
+            margin-right: 10px;
+        }
+        
+        .confirm-button {
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        .notification-item {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #f0f8ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: #4285f4;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .notification-desc {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .notification-time {
+            font-size: 12px;
+            color: #999;
+            margin-left: 10px;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            background-color: #ff4d4f;
+            color: white;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="prototype-container">
+        <!-- 首页 -->
+        <div>
+            <div class="screen-title">首页</div>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>20:30</span>
+                    <span>📶 📊 🔋</span>
+                </div>
+                <div class="header">
+                    <div class="header-title">学习社区</div>
+                    <div style="position: relative;">
+                        <span style="font-size: 20px;">🔔</span>
+                        <div class="badge">3</div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="搜索课程、笔记或问题">
+                    </div>
+                    
+                    <div class="category-tabs">
+                        <div class="category-tab active">推荐</div>
+                        <div class="category-tab">热门</div>
+                        <div class="category-tab">关注</div>
+                        <div class="category-tab">编程</div>
+                        <div class="category-tab">设计</div>
+                        <div class="category-tab">数学</div>
+                        <div class="category-tab">英语</div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>精选笔记</span>
+                        <span class="more-link">查看更多 ></span>
+                    </div>
+                    
+                    <div class="note-card">
+                        <div class="note-header">
+                            <div class="avatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%234285f4'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                            </div>
+                            <div class="user-info">
+                                <div class="username">张小明</div>
+                                <div class="publish-time">2小时前</div>
+                            </div>
+                        </div>
+                        <div class="note-title">Python数据分析实战笔记</div>
+                        <div class="note-content">今天学习了Pandas库的数据处理方法，整理了常用函数和实用技巧，分享给大家...</div>
+                        <div class="note-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23f5f5f5'/%3E%3Cpath d='M300 150 L350 100 L400 150 L450 80 L500 120' stroke='%234285f4' stroke-width='3' fill='none'/%3E%3Ccircle cx='300' cy='150' r='5' fill='%234285f4'/%3E%3Ccircle cx='350' cy='100' r='5' fill='%234285f4'/%3E%3Ccircle cx='400' cy='150' r='5' fill='%234285f4'/%3E%3Ccircle cx='450' cy='80' r='5' fill='%234285f4'/%3E%3Ccircle cx='500' cy='120' r='5' fill='%234285f4'/%3E%3Ctext x='400' y='250' font-family='Arial' font-size='20' text-anchor='middle' fill='%23333'>Python数据分析图表</text%3E%3C/svg%3E" alt="笔记图片">
+                        </div>
+                        <div class="note-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">👍</span>
+                                <span>128</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💬</span>
+                                <span>36</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">🔖</span>
+                                <span>收藏</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">↗️</span>
+                                <span>分享</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>推荐课程</span>
+                        <span class="more-link">查看更多 ></span>
+                    </div>
+                    
+                    <div class="course-card">
+                        <div class="course-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e6f2ff'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='12' text-anchor='middle' dominant-baseline='middle' fill='%234285f4'%3EJava课程%3C/text%3E%3C/svg%3E" alt="课程图片">
+                        </div>
+                        <div class="course-info">
+                            <div>
+                                <div class="course-title">Java编程入门到精通</div>
+                                <div class="course-desc">从零基础开始学习Java编程</div>
+                                <div>
+                                    <span class="tag">入门</span>
+                                    <span class="tag">热门</span>
+                                </div>
+                            </div>
+                            <div class="course-stats">
+                                <span>4.9分</span>
+                                <span>12345人学习</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="course-card">
+                        <div class="course-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23fff0f5'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='12' text-anchor='middle' dominant-baseline='middle' fill='%23ff4d4f'%3E设计课程%3C/text%3E%3C/svg%3E" alt="课程图片">
+                        </div>
+                        <div class="course-info">
+                            <div>
+                                <div class="course-title">UI设计实战课程</div>
+                                <div class="course-desc">掌握UI设计核心技能</div>
+                                <div>
+                                    <span class="tag">进阶</span>
+                                    <span class="tag">实战</span>
+                                </div>
+                            </div>
+                            <div class="course-stats">
+                                <span>4.8分</span>
+                                <span>8765人学习</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-bar">
+                    <div class="tab-item active">
+                        <div class="tab-icon">🏠</div>
+                        <div>首页</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">📚</div>
+                        <div>学习</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">✏️</div>
+                        <div>笔记</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">👤</div>
+                        <div>我的</div>
+                    </div>
+                </div>
+                <div class="floating-button">
+                    ✏️
+                </div>
+            </div>
+        </div>
+        
+        <!-- 笔记详情页 -->
+        <div>
+            <div class="screen-title">笔记详情</div>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>20:30</span>
+                    <span>📶 📊 🔋</span>
+                </div>
+                <div class="header">
+                    <div class="back-icon">←</div>
+                    <div class="header-title">笔记详情</div>
+                    <div>⋮</div>
+                </div>
+                <div class="content">
+                    <div class="note-card" style="box-shadow: none; border: none; padding: 0;">
+                        <div class="note-header">
+                            <div class="avatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%234285f4'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                            </div>
+                            <div class="user-info">
+                                <div class="username">张小明</div>
+                                <div class="publish-time">2小时前</div>
+                            </div>
+                            <div style="color: #4285f4;">关注</div>
+                        </div>
+                        <div class="note-title">Python数据分析实战笔记</div>
+                        <div class="note-content" style="margin-bottom: 15px;">
+                            今天学习了Pandas库的数据处理方法，整理了常用函数和实用技巧，分享给大家。
+                            <br><br>
+                            <strong>1. 数据导入与导出</strong><br>
+                            - pd.read_csv(): 从CSV文件导入数据<br>
+                            - pd.read_excel(): 从Excel文件导入数据<br>
+                            - df.to_csv(): 导出数据到CSV文件<br>
+                            <br>
+                            <strong>2. 数据清洗技巧</strong><br>
+                            - df.dropna(): 删除缺失值<br>
+                            - df.fillna(): 填充缺失值<br>
+                            - df.duplicated(): 检查重复值<br>
+                            <br>
+                            <strong>3. 数据分析方法</strong><br>
+                            - df.groupby(): 分组统计<br>
+                            - df.pivot_table(): 数据透视表<br>
+                            - df.corr(): 相关性分析<br>
+                        </div>
+                        <div class="note-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23f5f5f5'/%3E%3Cpath d='M300 150 L350 100 L400 150 L450 80 L500 120' stroke='%234285f4' stroke-width='3' fill='none'/%3E%3Ccircle cx='300' cy='150' r='5' fill='%234285f4'/%3E%3Ccircle cx='350' cy='100' r='5' fill='%234285f4'/%3E%3Ccircle cx='400' cy='150' r='5' fill='%234285f4'/%3E%3Ccircle cx='450' cy='80' r='5' fill='%234285f4'/%3E%3Ccircle cx='500' cy='120' r='5' fill='%234285f4'/%3E%3Ctext x='400' y='250' font-family='Arial' font-size='20' text-anchor='middle' fill='%23333'>Python数据分析图表</text%3E%3C/svg%3E" alt="笔记图片">
+                        </div>
+                        <div class="note-stats" style="margin: 15px 0;">
+                            <div class="stat-item">
+                                <span class="stat-icon">👍</span>
+                                <span>128</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💬</span>
+                                <span>36</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">🔖</span>
+                                <span>收藏</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">↗️</span>
+                                <span>分享</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>相关资源</span>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'%3E%3Crect width='800' height='450' fill='%23000'/%3E%3Ctext x='400' y='225' font-family='Arial' font-size='30' text-anchor='middle' dominant-baseline='middle' fill='white'%3EPython数据分析教学视频%3C/text%3E%3C/svg%3E" alt="视频缩略图">
+                            <div class="play-icon">▶</div>
+                            <div class="video-duration">15:30</div>
+                        </div>
+                        <div class="video-title">Python数据分析基础教程</div>
+                        <div class="video-info">
+                            <span>王教授</span>
+                            <span>10.5万次播放</span>
+                        </div>
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <div class="exercise-title">练习题：Pandas数据处理</div>
+                        <div class="option-item">
+                            <div class="option-prefix">A</div>
+                            <div class="option-content">使用df.dropna()删除所有包含缺失值的行</div>
+                        </div>
+                        <div class="option-item selected">
+                            <div class="option-prefix">B</div>
+                            <div class="option-content">使用df.fillna(0)将所有缺失值替换为0</div>
+                        </div>
+                        <div class="option-item">
+                            <div class="option-prefix">C</div>
+                            <div class="option-content">使用df.isna()检查数据中的缺失值</div>
+                        </div>
+                        <div class="option-item">
+                            <div class="option-prefix">D</div>
+                            <div class="option-content">使用df.replace()替换特定值</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>评论 (36)</span>
+                    </div>
+                    
+                    <div class="comment-item">
+                        <div class="note-header">
+                            <div class="avatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ff7f50'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                            </div>
+                            <div class="user-info">
+                                <div class="username">李华</div>
+                                <div class="publish-time">1小时前</div>
+                            </div>
+                        </div>
+                        <div class="comment-content">非常实用的笔记，我正好在学习数据分析，这些函数总结得很全面！</div>
+                        <div class="comment-footer">
+                            <div class="stat-item">
+                                <span class="stat-icon">👍</span>
+                                <span>24</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💬</span>
+                                <span>回复</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comment-item">
+                        <div class="note-header">
+                            <div class="avatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2382c8a0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                            </div>
+                            <div class="user-info">
+                                <div class="username">王明</div>
+                                <div class="publish-time">30分钟前</div>
+                            </div>
+                        </div>
+                        <div class="comment-content">能否分享一下你用的数据集？想自己实践一下这些方法。</div>
+                        <div class="comment-footer">
+                            <div class="stat-item">
+                                <span class="stat-icon">👍</span>
+                                <span>12</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💬</span>
+                                <span>回复</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; margin-top: 20px;">
+                        <div style="flex: 1; background-color: #f5f5f5; border-radius: 20px; padding: 10px; display: flex; align-items: center;">
+                            <span style="color: #999; margin-left: 5px;">写评论...</span>
+                        </div>
+                        <button style="margin-left: 10px; background-color: #4285f4; color: white; border: none; border-radius: 20px; padding: 0 15px; height: 36px;">发送</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 发布笔记页 -->
+        <div>
+            <div class="screen-title">发布笔记</div>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>20:30</span>
+                    <span>📶 📊 🔋</span>
+                </div>
+                <div class="header">
+                    <div class="back-icon">←</div>
+                    <div class="header-title">发布笔记</div>
+                    <div style="color: #4285f4;">发布</div>
+                </div>
+                <div class="content">
+                    <input type="text" placeholder="请输入标题..." style="border: none; font-size: 16px; font-weight: 500; width: 100%; margin-bottom: 15px; outline: none;">
+                    
+                    <div class="editor-toolbar">
+                        <div class="toolbar-item">B</div>
+                        <div class="toolbar-item"><i>I</i></div>
+                        <div class="toolbar-item"><u>U</u></div>
+                        <div class="toolbar-item">📷</div>
+                        <div class="toolbar-item">📊</div>
+                        <div class="toolbar-item">📋</div>
+                        <div class="toolbar-item">🔗</div>
+                    </div>
+                    
+                    <div class="editor-content">
+                        <div class="editor-placeholder">分享你的学习笔记、心得体会...</div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-size: 14px; color: #333; margin-bottom: 10px;">添加标签</div>
+                        <div class="tag-selector">
+                            <div class="tag" style="margin-bottom: 8px;">Python</div>
+                            <div class="tag" style="margin-bottom: 8px;">数据分析</div>
+                            <div class="tag" style="margin-bottom: 8px;">Pandas</div>
+                            <div class="tag" style="margin-bottom: 8px; background-color: #f5f5f5; color: #666;">+ 添加标签</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-size: 14px; color: #333; margin-bottom: 10px;">关联课程</div>
+                        <div style="display: flex; align-items: center; padding: 10px; border-radius: 8px; border: 1px dashed #ccc;">
+                            <div style="width: 40px; height: 40px; border-radius: 8px; background-color: #e6f2ff; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                📚
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 14px; color: #333;">Python数据分析与可视化</div>
+                                <div style="font-size: 12px; color: #999;">王教授 · 共32课时</div>
+                            </div>
+                            <div style="color: #4285f4; font-size: 14px;">更换</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; margin-bottom: 15px;">
+                        <div style="flex: 1; display: flex; align-items: center;">
+                            <span style="margin-right: 10px; font-size: 14px; color: #333;">允许评论</span>
+                            <div style="width: 40px; height: 20px; background-color: #4285f4; border-radius: 10px; position: relative;">
+                                <div style="position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background-color: white;"></div>
+                            </div>
+                        </div>
+                        <div style="flex: 1; display: flex; align-items: center;">
+                            <span style="margin-right: 10px; font-size: 14px; color: #333;">公开可见</span>
+                            <div style="width: 40px; height: 20px; background-color: #4285f4; border-radius: 10px; position: relative;">
+                                <div style="position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background-color: white;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 视频播放页 -->
+        <div>
+            <div class="screen-title">视频播放</div>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>20:30</span>
+                    <span>📶 📊 🔋</span>
+                </div>
+                <div style="position: relative; height: 180px; background-color: black; display: flex; align-items: center; justify-content: center;">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'%3E%3Crect width='800' height='450' fill='%23000'/%3E%3Ctext x='400' y='225' font-family='Arial' font-size='30' text-anchor='middle' dominant-baseline='middle' fill='white'%3EPython数据分析教学视频%3C/text%3E%3C/svg%3E" alt="视频播放" style="width: 100%; height: 100%; object-fit: contain;">
+                    <div style="position: absolute; bottom: 10px; left: 0; right: 0; display: flex; padding: 0 15px;">
+                        <div style="color: white; font-size: 12px; margin-right: 15px;">05:20 / 15:30</div>
+                        <div style="flex: 1; height: 4px; background-color: rgba(255, 255, 255, 0.3); border-radius: 2px; margin-top: 6px; position: relative;">
+                            <div style="position: absolute; left: 0; top: 0; width: 35%; height: 100%; background-color: #4285f4; border-radius: 2px;"></div>
+                        </div>
+                        <div style="color: white; font-size: 16px; margin-left: 15px;">⏸</div>
+                    </div>
+                </div>
+                <div class="header" style="border-bottom: none;">
+                    <div class="header-title">Python数据分析基础教程</div>
+                    <div>⋮</div>
+                </div>
+                <div class="content" style="height: calc(100% - 224px);">
+                    <div style="display: flex; margin-bottom: 15px;">
+                        <div class="avatar" style="width: 40px; height: 40px;">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5a623'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="讲师头像">
+                        </div>
+                        <div style="flex: 1; margin-left: 10px;">
+                            <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 2px;">王教授</div>
+                            <div style="font-size: 12px; color: #999;">数据科学专家 · 10.5万次播放</div>
+                        </div>
+                        <button style="background-color: #4285f4; color: white; border: none; border-radius: 20px; padding: 0 15px; height: 32px; font-size: 14px;">关注</button>
+                    </div>
+                    
+                    <div style="background-color: #f5f5f5; border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                        <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 8px;">课程简介</div>
+                        <div style="font-size: 14px; color: #666; line-height: 1.5;">本视频详细讲解Python数据分析基础知识，包括Pandas库的使用方法、数据清洗技巧、数据可视化等内容，适合数据分析入门学习。</div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>课程章节</span>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; padding: 12px; border-radius: 8px; background-color: #e6f2ff; margin-bottom: 10px; border: 1px solid #4285f4;">
+                        <div style="width: 24px; height: 24px; border-radius: 12px; background-color: #4285f4; color: white; display: flex; align-items: center; justify-content: center; margin-right: 10px;">▶</div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; color: #333;">1. Python数据分析基础</div>
+                            <div style="font-size: 12px; color: #666;">15:30 · 当前播放</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; padding: 12px; border-radius: 8px; background-color: #f5f5f5; margin-bottom: 10px;">
+                        <div style="width: 24px; height: 24px; border-radius: 12px; background-color: white; color: #666; display: flex; align-items: center; justify-content: center; margin-right: 10px;">2</div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; color: #333;">2. Pandas数据处理详解</div>
+                            <div style="font-size: 12px; color: #666;">20:15</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; padding: 12px; border-radius: 8px; background-color: #f5f5f5; margin-bottom: 10px;">
+                        <div style="width: 24px; height: 24px; border-radius: 12px; background-color: white; color: #666; display: flex; align-items: center; justify-content: center; margin-right: 10px;">3</div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; color: #333;">3. 数据可视化技巧</div>
+                            <div style="font-size: 12px; color: #666;">18:45</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; padding: 12px; border-radius: 8px; background-color: #f5f5f5; margin-bottom: 10px;">
+                        <div style="width: 24px; height: 24px; border-radius: 12px; background-color: white; color: #666; display: flex; align-items: center; justify-content: center; margin-right: 10px;">4</div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; color: #333;">4. 实战案例分析</div>
+                            <div style="font-size: 12px; color: #666;">25:10</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>相关笔记</span>
+                        <span class="more-link">查看全部 ></span>
+                    </div>
+                    
+                    <div class="note-card">
+                        <div class="note-header">
+                            <div class="avatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%234285f4'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                            </div>
+                            <div class="user-info">
+                                <div class="username">张小明</div>
+                                <div class="publish-time">2小时前</div>
+                            </div>
+                        </div>
+                        <div class="note-title">Python数据分析实战笔记</div>
+                        <div class="note-content">今天学习了Pandas库的数据处理方法，整理了常用函数和实用技巧，分享给大家...</div>
+                        <div class="note-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">👍</span>
+                                <span>128</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💬</span>
+                                <span>36</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 个人中心页 -->
+        <div>
+            <div class="screen-title">个人中心</div>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>20:30</span>
+                    <span>📶 📊 🔋</span>
+                </div>
+                <div class="header">
+                    <div class="header-title">个人中心</div>
+                    <div>⚙️</div>
+                </div>
+                <div class="content">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%234285f4'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                        </div>
+                        <div class="profile-name">我的昵称</div>
+                        <div class="profile-desc">热爱学习，分享知识</div>
+                        <button class="button outline-button" style="width: 120px;">编辑资料</button>
+                    </div>
+                    
+                    <div class="profile-stats">
+                        <div class="profile-stat-item">
+                            <div class="stat-value">128</div>
+                            <div class="stat-label">笔记</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="stat-value">256</div>
+                            <div class="stat-label">关注</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="stat-value">512</div>
+                            <div class="stat-label">粉丝</div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-list">
+                        <div class="menu-item">
+                            <div class="menu-icon">📚</div>
+                            <div class="menu-label">我的课程</div>
+                            <div class="menu-arrow">></div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon">📝</div>
+                            <div class="menu-label">我的笔记</div>
+                            <div class="menu-arrow">></div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon">🔖</div>
+                            <div class="menu-label">我的收藏</div>
+                            <div class="menu-arrow">></div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon">📊</div>
+                            <div class="menu-label">学习数据</div>
+                            <div class="menu-arrow">></div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-list">
+                        <div class="menu-item">
+                            <div class="menu-icon">👥</div>
+                            <div class="menu-label">邀请好友</div>
+                            <div class="menu-arrow">></div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon">💰</div>
+                            <div class="menu-label">会员中心</div>
+                            <div style="display: flex; align-items: center;">
+                                <div style="font-size: 12px; color: #ff8c00; margin-right: 5px;">限时优惠</div>
+                                <div class="menu-arrow">></div>
+                            </div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon">🎁</div>
+                            <div class="menu-label">积分商城</div>
+                            <div class="menu-arrow">></div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-list">
+                        <div class="menu-item">
+                            <div class="menu-icon">❓</div>
+                            <div class="menu-label">帮助与反馈</div>
+                            <div class="menu-arrow">></div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon">⚙️</div>
+                            <div class="menu-label">设置</div>
+                            <div class="menu-arrow">></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-bar">
+                    <div class="tab-item">
+                        <div class="tab-icon">🏠</div>
+                        <div>首页</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">📚</div>
+                        <div>学习</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">✏️</div>
+                        <div>笔记</div>
+                    </div>
+                    <div class="tab-item active">
+                        <div class="tab-icon">👤</div>
+                        <div>我的</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 学习页 -->
+        <div>
+            <div class="screen-title">学习页</div>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>20:30</span>
+                    <span>📶 📊 🔋</span>
+                </div>
+                <div class="header">
+                    <div class="header-title">学习</div>
+                    <div>🔍</div>
+                </div>
+                <div class="content">
+                    <div class="category-tabs">
+                        <div class="category-tab active">课程</div>
+                        <div class="category-tab">习题</div>
+                        <div class="category-tab">资料</div>
+                        <div class="category-tab">收藏</div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>我的课程</span>
+                        <span class="more-link">查看全部 ></span>
+                    </div>
+                    
+                    <div class="course-card">
+                        <div class="course-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e6f2ff'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='12' text-anchor='middle' dominant-baseline='middle' fill='%234285f4'%3EPython%3C/text%3E%3C/svg%3E" alt="课程图片">
+                        </div>
+                        <div class="course-info">
+                            <div>
+                                <div class="course-title">Python数据分析与可视化</div>
+                                <div class="course-desc">已学习 8/32 课时</div>
+                                <div style="width: 100%; height: 4px; background-color: #f0f0f0; border-radius: 2px; margin-top: 5px;">
+                                    <div style="width: 25%; height: 100%; background-color: #4285f4; border-radius: 2px;"></div>
+                                </div>
+                            </div>
+                            <div class="course-stats">
+                                <span>上次学习: 今天</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="course-card">
+                        <div class="course-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23fff0f5'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='12' text-anchor='middle' dominant-baseline='middle' fill='%23ff4d4f'%3E设计%3C/text%3E%3C/svg%3E" alt="课程图片">
+                        </div>
+                        <div class="course-info">
+                            <div>
+                                <div class="course-title">UI设计实战课程</div>
+                                <div class="course-desc">已学习 12/24 课时</div>
+                                <div style="width: 100%; height: 4px; background-color: #f0f0f0; border-radius: 2px; margin-top: 5px;">
+                                    <div style="width: 50%; height: 100%; background-color: #4285f4; border-radius: 2px;"></div>
+                                </div>
+                            </div>
+                            <div class="course-stats">
+                                <span>上次学习: 昨天</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>学习计划</span>
+                    </div>
+                    
+                    <div style="background-color: #f0f8ff; border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div style="font-size: 15px; font-weight: 500; color: #333;">今日学习目标</div>
+                            <div style="font-size: 14px; color: #4285f4;">2/3 完成</div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 20px; height: 20px; border-radius: 4px; background-color: #4285f4; color: white; display: flex; align-items: center; justify-content: center; margin-right: 10px;">✓</div>
+                            <div style="flex: 1; font-size: 14px; color: #333;">完成Python数据分析课程第8课</div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 20px; height: 20px; border-radius: 4px; background-color: #4285f4; color: white; display: flex; align-items: center; justify-content: center; margin-right: 10px;">✓</div>
+                            <div style="flex: 1; font-size: 14px; color: #333;">完成每日练习题</div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 20px; height: 20px; border-radius: 4px; background-color: white; border: 1px solid #ccc; margin-right: 10px;"></div>
+                            <div style="flex: 1; font-size: 14px; color: #333;">阅读推荐文章</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>推荐学习</span>
+                        <span class="more-link">查看全部 ></span>
+                    </div>
+                    
+                    <div style="display: flex; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px;">
+                        <div style="min-width: 150px; margin-right: 10px; background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+                            <div style="height: 80px; background-color: #e6f2ff; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 24px;">📊</span>
+                            </div>
+                            <div style="padding: 10px;">
+                                <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 5px;">数据可视化基础</div>
+                                <div style="font-size: 12px; color: #999;">推荐指数: ⭐⭐⭐⭐⭐</div>
+                            </div>
+                        </div>
+                        <div style="min-width: 150px; margin-right: 10px; background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+                            <div style="height: 80px; background-color: #fff0f5; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 24px;">🎨</span>
+                            </div>
+                            <div style="padding: 10px;">
+                                <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 5px;">色彩搭配原理</div>
+                                <div style="font-size: 12px; color: #999;">推荐指数: ⭐⭐⭐⭐</div>
+                            </div>
+                        </div>
+                        <div style="min-width: 150px; background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+                            <div style="height: 80px; background-color: #f0fff0; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 24px;">📱</span>
+                            </div>
+                            <div style="padding: 10px;">
+                                <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 5px;">移动端设计规范</div>
+                                <div style="font-size: 12px; color: #999;">推荐指数: ⭐⭐⭐⭐</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-bar">
+                    <div class="tab-item">
+                        <div class="tab-icon">🏠</div>
+                        <div>首页</div>
+                    </div>
+                    <div class="tab-item active">
+                        <div class="tab-icon">📚</div>
+                        <div>学习</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">✏️</div>
+                        <div>笔记</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">👤</div>
+                        <div>我的</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 笔记列表页 -->
+        <div>
+            <div class="screen-title">笔记列表</div>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>20:30</span>
+                    <span>📶 📊 🔋</span>
+                </div>
+                <div class="header">
+                    <div class="header-title">笔记</div>
+                    <div>🔍</div>
+                </div>
+                <div class="content">
+                    <div class="category-tabs">
+                        <div class="category-tab active">全部</div>
+                        <div class="category-tab">我的</div>
+                        <div class="category-tab">关注</div>
+                        <div class="category-tab">收藏</div>
+                    </div>
+                    
+                    <div class="note-card">
+                        <div class="note-header">
+                            <div class="avatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%234285f4'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                            </div>
+                            <div class="user-info">
+                                <div class="username">张小明</div>
+                                <div class="publish-time">2小时前</div>
+                            </div>
+                        </div>
+                        <div class="note-title">Python数据分析实战笔记</div>
+                        <div class="note-content">今天学习了Pandas库的数据处理方法，整理了常用函数和实用技巧，分享给大家...</div>
+                        <div class="note-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23f5f5f5'/%3E%3Cpath d='M300 150 L350 100 L400 150 L450 80 L500 120' stroke='%234285f4' stroke-width='3' fill='none'/%3E%3Ccircle cx='300' cy='150' r='5' fill='%234285f4'/%3E%3Ccircle cx='350' cy='100' r='5' fill='%234285f4'/%3E%3Ccircle cx='400' cy='150' r='5' fill='%234285f4'/%3E%3Ccircle cx='450' cy='80' r='5' fill='%234285f4'/%3E%3Ccircle cx='500' cy='120' r='5' fill='%234285f4'/%3E%3Ctext x='400' y='250' font-family='Arial' font-size='20' text-anchor='middle' fill='%23333'>Python数据分析图表</text%3E%3C/svg%3E" alt="笔记图片">
+                        </div>
+                        <div class="note-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">👍</span>
+                                <span>128</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💬</span>
+                                <span>36</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">🔖</span>
+                                <span>收藏</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">↗️</span>
+                                <span>分享</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="note-card">
+                        <div class="note-header">
+                            <div class="avatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ff7f50'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                            </div>
+                            <div class="user-info">
+                                <div class="username">李华</div>
+                                <div class="publish-time">昨天</div>
+                            </div>
+                        </div>
+                        <div class="note-title">UI设计配色技巧总结</div>
+                        <div class="note-content">分享几种常用的配色方案和技巧，帮助大家提升设计作品的视觉效果...</div>
+                        <div class="note-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23f5f5f5'/%3E%3Crect x='100' y='100' width='100' height='200' fill='%234285f4'/%3E%3Crect x='220' y='100' width='100' height='200' fill='%23ea4335'/%3E%3Crect x='340' y='100' width='100' height='200' fill='%23fbbc05'/%3E%3Crect x='460' y='100' width='100' height='200' fill='%2334a853'/%3E%3Crect x='580' y='100' width='100' height='200' fill='%23673ab7'/%3E%3Ctext x='400' y='350' font-family='Arial' font-size='20' text-anchor='middle' fill='%23333'>UI设计配色方案</text%3E%3C/svg%3E" alt="笔记图片">
+                        </div>
+                        <div class="note-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">👍</span>
+                                <span>96</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💬</span>
+                                <span>24</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">🔖</span>
+                                <span>收藏</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">↗️</span>
+                                <span>分享</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="note-card">
+                        <div class="note-header">
+                            <div class="avatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2382c8a0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                            </div>
+                            <div class="user-info">
+                                <div class="username">王明</div>
+                                <div class="publish-time">3天前</div>
+                            </div>
+                        </div>
+                        <div class="note-title">JavaScript异步编程详解</div>
+                        <div class="note-content">详细讲解Promise、async/await的使用方法和实际应用场景，帮助你掌握JS异步编程...</div>
+                        <div class="note-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">👍</span>
+                                <span>85</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💬</span>
+                                <span>18</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">🔖</span>
+                                <span>收藏</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">↗️</span>
+                                <span>分享</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-bar">
+                    <div class="tab-item">
+                        <div class="tab-icon">🏠</div>
+                        <div>首页</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">📚</div>
+                        <div>学习</div>
+                    </div>
+                    <div class="tab-item active">
+                        <div class="tab-icon">✏️</div>
+                        <div>笔记</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">👤</div>
+                        <div>我的</div>
+                    </div>
+                </div>
+                <div class="floating-button">
+                    ✏️
+                </div>
+            </div>
+        </div>
+        
+        <!-- 习题详情页 -->
+        <div>
+            <div class="screen-title">习题详情</div>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>20:30</span>
+                    <span>📶 📊 🔋</span>
+                </div>
+                <div class="header">
+                    <div class="back-icon">←</div>
+                    <div class="header-title">习题详情</div>
+                    <div>⋮</div>
+                </div>
+                <div class="content">
+                    <div style="background-color: #f0f8ff; border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                        <div style="font-size: 16px; font-weight: 500; color: #333; margin-bottom: 10px;">Python数据分析 - 第8章习题</div>
+                        <div style="display: flex; justify-content: space-between; font-size: 14px; color: #666; margin-bottom: 5px;">
+                            <span>共10题</span>
+                            <span>难度: 中等</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 14px; color: #666;">
+                            <span>预计用时: 20分钟</span>
+                            <span>已完成: 3/10</span>
+                        </div>
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div style="font-size: 14px; color: #666;">第4题 (单选题)</div>
+                            <div style="font-size: 14px; color: #4285f4;">4/10</div>
+                        </div>
+                        <div class="exercise-title">在Pandas中，以下哪个函数用于处理缺失值？</div>
+                        <div class="option-item">
+                            <div class="option-prefix">A</div>
+                            <div class="option-content">pd.merge()</div>
+                        </div>
+                        <div class="option-item selected">
+                            <div class="option-prefix">B</div>
+                            <div class="option-content">pd.fillna()</div>
+                        </div>
+                        <div class="option-item">
+                            <div class="option-prefix">C</div>
+                            <div class="option-content">pd.concat()</div>
+                        </div>
+                        <div class="option-item">
+                            <div class="option-prefix">D</div>
+                            <div class="option-content">pd.groupby()</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; margin-bottom: 20px;">
+                        <button style="flex: 1; height: 40px; border: none; background-color: #f5f5f5; color: #666; border-radius: 20px; margin-right: 10px;">上一题</button>
+                        <button style="flex: 1; height: 40px; border: none; background-color: #4285f4; color: white; border-radius: 20px;">下一题</button>
+                    </div>
+                    
+                    <div style="background-color: #f5f5f5; border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                        <div style="font-size: 15px; font-weight: 500; color: #333; margin-bottom: 10px;">答案解析</div>
+                        <div style="font-size: 14px; color: #666; line-height: 1.5;">
+                            正确答案是 B: pd.fillna()<br><br>
+                            pd.fillna() 是 Pandas 中用于填充缺失值的函数。它可以将缺失值(NaN)替换为指定的值。<br><br>
+                            其他选项的功能:<br>
+                            - pd.merge(): 用于合并数据框<br>
+                            - pd.concat(): 用于连接数据框<br>
+                            - pd.groupby(): 用于分组数据
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>相关笔记推荐</span>
+                    </div>
+                    
+                    <div class="note-card">
+                        <div class="note-header">
+                            <div class="avatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%234285f4'/%3E%3Ccircle cx='50' cy='40' r='20' fill='white'/%3E%3Cpath d='M30 90 Q50 70 70 90' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="用户头像">
+                            </div>
+                            <div class="user-info">
+                                <div class="username">张小明</div>
+                                <div class="publish-time">2小时前</div>
+                            </div>
+                        </div>
+                        <div class="note-title">Python数据分析实战笔记</div>
+                        <div class="note-content">今天学习了Pandas库的数据处理方法，整理了常用函数和实用技巧，分享给大家...</div>
+                        <div class="note-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">👍</span>
+                                <span>128</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💬</span>
+                                <span>36</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+                                
